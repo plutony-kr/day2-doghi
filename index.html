@@ -5,131 +5,181 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>우리집 강아지 탄이를 소개합니다</title>
   <style>
+    @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css");
+
+    /* 라프텔 design.md 다크 테마 토큰 */
     :root {
-      --bg: #fff8f0;
-      --card: #ffffff;
-      --text: #5b4a50;
-      --muted: #9a8a90;
-      --pink: #ffd6e3;
-      --pink-dark: #e87aa0;
-      --yellow: #fff2bf;
-      --mint: #d9f2e6;
-      --sky: #d6ebff;
-      --lavender: #e6dcfa;
-      --peach: #ffe3cf;
-      --radius: 24px;
-      --shadow: 0 6px 18px rgba(200, 150, 170, 0.18);
+      --point: #816bff;
+      --point-hover: #6a54e6;
+      --white: #ffffff;
+      --bg-1: #121212;
+      --bg-2: #000000;
+      --bg-3: #323232;
+      --bg-4: #505050;
+      --fg-1: #f7f7f7;
+      --fg-2: #e2e2e2;
+      --fg-3: #ababab;
+      --fg-4: #636363;
+      --border-1: #323232;
+      --border-2: #505050;
+      --badge-red: #ff1010;
+      --radius-xs: 3px;
+      --radius-sm: 4px;
+      --radius-pill: 9999px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-24: 24px;
+      --space-40: 40px;
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      padding: 0 16px 40px;
-      background: var(--bg);
-      color: var(--text);
-      font-family: "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
-      line-height: 1.6;
+      padding: 0 var(--space-16) var(--space-40);
+      background: var(--bg-2);
+      color: var(--fg-1);
+      font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
     }
 
+    :focus-visible { outline: 2px solid var(--point); outline-offset: 2px; }
+
+    /* 헤더: 높이 64px 이상, 어두운 면 + 하단 1px 선 */
     header {
-      max-width: 640px;
-      margin: 0 auto;
-      padding: 32px 8px 8px;
+      margin: 0 calc(var(--space-16) * -1);
+      padding: var(--space-24) var(--space-16);
+      background: var(--bg-1);
+      border-bottom: 1px solid var(--border-1);
       text-align: center;
     }
-    header h1 { margin: 0 0 6px; font-size: 1.6rem; color: var(--pink-dark); }
-    header p { margin: 0; color: var(--muted); }
+    header h1 { margin: 0; font-size: 32px; line-height: 48px; font-weight: 700; }
+    header h1 span { color: var(--point); }
+    header p { margin: 0; color: var(--fg-3); }
 
     main { max-width: 640px; margin: 0 auto; }
 
     section {
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 20px 22px 22px;
-      margin-top: 18px;
+      background: var(--bg-1);
+      border: 1px solid var(--border-1);
+      border-radius: var(--radius-sm);
+      padding: var(--space-24);
+      margin-top: var(--space-16);
     }
-    section h2 { margin: 0 0 12px; font-size: 1.15rem; }
-    #profile h2 { color: #d9779a; }
-    #personality h2 { color: #e0a020; }
-    #likes h2 { color: #4fb286; }
-    #routine h2 { color: #5a9fd8; }
-    #caution h2 { color: #e0705a; }
-    #photos h2 { color: #8f72d6; }
+    section h2 {
+      margin: 0 0 var(--space-12);
+      font-size: 16px;
+      line-height: 24px;
+      font-weight: 700;
+      color: var(--fg-1);
+    }
+    /* 보라 포인트는 신호에만: 제목 앞 작은 막대 */
+    section h2::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 14px;
+      margin-right: 8px;
+      vertical-align: -1px;
+      border-radius: var(--radius-xs);
+      background: var(--point);
+    }
 
     /* 프로필 표 */
-    table { width: 100%; border-collapse: separate; border-spacing: 0 6px; }
-    th, td { padding: 8px 14px; text-align: left; }
-    th {
-      width: 32%;
-      background: var(--pink);
-      border-radius: 14px 0 0 14px;
-      color: #a8486c;
-    }
-    td { background: #fff1f5; border-radius: 0 14px 14px 0; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: var(--space-12) 0; text-align: left; border-bottom: 1px solid var(--border-1); }
+    tr:last-child th, tr:last-child td { border-bottom: 0; }
+    th { width: 30%; color: var(--fg-3); font-size: 14px; line-height: 21px; font-weight: 700; }
+    td { color: var(--fg-1); }
 
     ul, ol { margin: 0; padding: 0; list-style: none; }
 
     /* 성격 */
     #personality li {
-      background: var(--yellow);
-      border-radius: 16px;
-      padding: 10px 16px;
-      margin-bottom: 8px;
+      background: var(--bg-3);
+      border-radius: var(--radius-sm);
+      padding: var(--space-12) var(--space-16);
+      margin-bottom: var(--space-8);
+      color: var(--fg-2);
     }
     #personality li:last-child { margin-bottom: 0; }
 
-    /* 좋아하는 것: 알약 모양 */
-    #likes ul { display: flex; flex-wrap: wrap; gap: 8px; }
+    /* 좋아하는 것: 활성 칩 (보라 알약) */
+    #likes ul { display: flex; flex-wrap: wrap; gap: var(--space-8); }
     #likes li {
-      background: var(--mint);
-      border-radius: 999px;
-      padding: 8px 18px;
+      height: 36px;
+      padding: 0 var(--space-16);
+      border-radius: var(--radius-pill);
+      background: var(--point);
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 36px;
     }
 
-    /* 하루 일과: 번호 동그라미 */
+    /* 하루 일과: N 배지 느낌의 보라 원형 번호 */
     #routine ol { counter-reset: step; }
     #routine li {
       counter-increment: step;
       display: flex;
       align-items: center;
-      gap: 12px;
-      background: var(--sky);
-      border-radius: 16px;
-      padding: 10px 14px;
-      margin-bottom: 8px;
+      gap: var(--space-12);
+      background: var(--bg-3);
+      border-radius: var(--radius-sm);
+      padding: var(--space-12) var(--space-16);
+      margin-bottom: var(--space-8);
+      color: var(--fg-2);
     }
     #routine li:last-child { margin-bottom: 0; }
     #routine li::before {
       content: counter(step);
       flex: none;
-      width: 28px;
-      height: 28px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
-      background: #fff;
-      color: #5a9fd8;
-      font-weight: bold;
+      background: var(--point);
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 700;
       text-align: center;
-      line-height: 28px;
+      line-height: 24px;
     }
 
-    /* 주의 */
+    /* 주의: 빨강 배지 */
     #caution li {
-      background: #ffe6e0;
-      border-radius: 16px;
-      padding: 10px 16px 10px 42px;
-      margin-bottom: 8px;
-      position: relative;
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+      background: var(--bg-3);
+      border-radius: var(--radius-sm);
+      padding: var(--space-12) var(--space-16);
+      margin-bottom: var(--space-8);
+      color: var(--fg-2);
     }
     #caution li:last-child { margin-bottom: 0; }
-    #caution li::before { content: "⚠️"; position: absolute; left: 14px; }
+    #caution li::before {
+      content: "주의";
+      flex: none;
+      height: 17px;
+      padding: 0 6px;
+      border-radius: var(--radius-xs);
+      background: var(--badge-red);
+      color: var(--white);
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 17px;
+    }
+
+    .hint { margin: 0 0 var(--space-12); color: var(--fg-3); font-size: 14px; line-height: 21px; }
 
     /* 사진 */
     .photo-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+      gap: var(--space-12);
     }
     .photo {
       display: block;
@@ -137,14 +187,12 @@
       aspect-ratio: 1 / 1;
       padding: 0;
       border: 0;
-      border-radius: 20px;
+      border-radius: var(--radius-sm);
       overflow: hidden;
       cursor: pointer;
-      background: #eee;
-      box-shadow: var(--shadow);
-      transition: transform 0.15s;
+      background: var(--bg-3);
     }
-    .photo:hover, .photo:focus-visible { transform: scale(1.03); }
+    .photo:hover { opacity: 0.85; }
     .photo svg, .modal-photo svg { display: block; width: 100%; height: 100%; }
 
     /* 모달 */
@@ -154,39 +202,45 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px;
-      background: rgba(90, 60, 80, 0.45);
+      padding: var(--space-16);
+      background: rgba(0, 0, 0, 0.75);
       z-index: 10;
     }
     .modal[hidden] { display: none; }
     .modal-box {
       width: 100%;
       max-width: 420px;
-      background: var(--card);
-      border-radius: 28px;
-      padding: 16px;
+      background: var(--bg-1);
+      border: 1px solid var(--border-2);
+      border-radius: var(--radius-sm);
+      padding: var(--space-16);
       text-align: center;
-      box-shadow: 0 10px 30px rgba(90, 60, 80, 0.3);
     }
     .modal-photo {
       width: 100%;
       aspect-ratio: 1 / 1;
-      border-radius: 20px;
+      border-radius: var(--radius-sm);
       overflow: hidden;
     }
-    #modal-caption { margin: 12px 0 0; font-weight: bold; color: var(--pink-dark); }
+    #modal-caption { margin: var(--space-12) 0 0; font-weight: 700; color: var(--fg-1); }
     #modal-close {
-      margin-top: 12px;
-      padding: 10px 36px;
+      margin-top: var(--space-12);
+      height: 45px;
+      padding: 0 var(--space-40);
       border: 0;
-      border-radius: 999px;
-      background: var(--pink);
-      color: #a8486c;
-      font-size: 1rem;
-      font-weight: bold;
+      border-radius: var(--radius-sm);
+      background: var(--point);
+      color: var(--white);
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 700;
       cursor: pointer;
     }
-    #modal-close:hover { background: #ffc4d6; }
+    #modal-close:hover { background: var(--point-hover); }
+
+    @media (max-width: 480px) {
+      header h1 { font-size: 24px; line-height: 36px; }
+    }
 
     @media (min-width: 560px) {
       .photo-grid { grid-template-columns: repeat(3, 1fr); }
@@ -231,7 +285,7 @@
   </svg>
 
   <header>
-    <h1>우리집 강아지 탄이를 소개합니다</h1>
+    <h1>우리집 강아지 <span>탄이</span>를 소개합니다</h1>
     <p>만나러 오기 전에 미리 읽어봐 주세요!</p>
   </header>
 
@@ -284,7 +338,7 @@
 
     <section id="photos">
       <h2>사진</h2>
-      <p style="margin:0 0 12px;color:var(--muted);font-size:.9rem">사진을 누르면 크게 볼 수 있어요.</p>
+      <p class="hint">사진을 누르면 크게 볼 수 있어요.</p>
       <div class="photo-grid">
 
         <!-- 1. 기본 인물사진 -->
