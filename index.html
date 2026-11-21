@@ -4,8 +4,232 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>우리집 강아지 탄이를 소개합니다</title>
+  <style>
+    :root {
+      --bg: #fff8f0;
+      --card: #ffffff;
+      --text: #5b4a50;
+      --muted: #9a8a90;
+      --pink: #ffd6e3;
+      --pink-dark: #e87aa0;
+      --yellow: #fff2bf;
+      --mint: #d9f2e6;
+      --sky: #d6ebff;
+      --lavender: #e6dcfa;
+      --peach: #ffe3cf;
+      --radius: 24px;
+      --shadow: 0 6px 18px rgba(200, 150, 170, 0.18);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0 16px 40px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+      line-height: 1.6;
+    }
+
+    header {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 32px 8px 8px;
+      text-align: center;
+    }
+    header h1 { margin: 0 0 6px; font-size: 1.6rem; color: var(--pink-dark); }
+    header p { margin: 0; color: var(--muted); }
+
+    main { max-width: 640px; margin: 0 auto; }
+
+    section {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px 22px 22px;
+      margin-top: 18px;
+    }
+    section h2 { margin: 0 0 12px; font-size: 1.15rem; }
+    #profile h2 { color: #d9779a; }
+    #personality h2 { color: #e0a020; }
+    #likes h2 { color: #4fb286; }
+    #routine h2 { color: #5a9fd8; }
+    #caution h2 { color: #e0705a; }
+    #photos h2 { color: #8f72d6; }
+
+    /* 프로필 표 */
+    table { width: 100%; border-collapse: separate; border-spacing: 0 6px; }
+    th, td { padding: 8px 14px; text-align: left; }
+    th {
+      width: 32%;
+      background: var(--pink);
+      border-radius: 14px 0 0 14px;
+      color: #a8486c;
+    }
+    td { background: #fff1f5; border-radius: 0 14px 14px 0; }
+
+    ul, ol { margin: 0; padding: 0; list-style: none; }
+
+    /* 성격 */
+    #personality li {
+      background: var(--yellow);
+      border-radius: 16px;
+      padding: 10px 16px;
+      margin-bottom: 8px;
+    }
+    #personality li:last-child { margin-bottom: 0; }
+
+    /* 좋아하는 것: 알약 모양 */
+    #likes ul { display: flex; flex-wrap: wrap; gap: 8px; }
+    #likes li {
+      background: var(--mint);
+      border-radius: 999px;
+      padding: 8px 18px;
+    }
+
+    /* 하루 일과: 번호 동그라미 */
+    #routine ol { counter-reset: step; }
+    #routine li {
+      counter-increment: step;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--sky);
+      border-radius: 16px;
+      padding: 10px 14px;
+      margin-bottom: 8px;
+    }
+    #routine li:last-child { margin-bottom: 0; }
+    #routine li::before {
+      content: counter(step);
+      flex: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #fff;
+      color: #5a9fd8;
+      font-weight: bold;
+      text-align: center;
+      line-height: 28px;
+    }
+
+    /* 주의 */
+    #caution li {
+      background: #ffe6e0;
+      border-radius: 16px;
+      padding: 10px 16px 10px 42px;
+      margin-bottom: 8px;
+      position: relative;
+    }
+    #caution li:last-child { margin-bottom: 0; }
+    #caution li::before { content: "⚠️"; position: absolute; left: 14px; }
+
+    /* 사진 */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .photo {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      padding: 0;
+      border: 0;
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: pointer;
+      background: #eee;
+      box-shadow: var(--shadow);
+      transition: transform 0.15s;
+    }
+    .photo:hover, .photo:focus-visible { transform: scale(1.03); }
+    .photo svg, .modal-photo svg { display: block; width: 100%; height: 100%; }
+
+    /* 모달 */
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: rgba(90, 60, 80, 0.45);
+      z-index: 10;
+    }
+    .modal[hidden] { display: none; }
+    .modal-box {
+      width: 100%;
+      max-width: 420px;
+      background: var(--card);
+      border-radius: 28px;
+      padding: 16px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(90, 60, 80, 0.3);
+    }
+    .modal-photo {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    #modal-caption { margin: 12px 0 0; font-weight: bold; color: var(--pink-dark); }
+    #modal-close {
+      margin-top: 12px;
+      padding: 10px 36px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--pink);
+      color: #a8486c;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #modal-close:hover { background: #ffc4d6; }
+
+    @media (min-width: 560px) {
+      .photo-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
 </head>
 <body>
+  <!-- 탄이 그림 재료 (화면에는 보이지 않음) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <!-- 얼굴 바탕: 세이블 포메 -->
+      <symbol id="dog-base" viewBox="0 0 100 100">
+        <path d="M16 42 L22 6 L48 24 Z" fill="#c07a38"/>
+        <path d="M84 42 L78 6 L52 24 Z" fill="#c07a38"/>
+        <path d="M24 32 L26 16 L38 25 Z" fill="#ffb8c6"/>
+        <path d="M76 32 L74 16 L62 25 Z" fill="#ffb8c6"/>
+        <circle cx="50" cy="56" r="38" fill="#e8a862"/>
+        <circle cx="17" cy="64" r="13" fill="#e8a862"/>
+        <circle cx="83" cy="64" r="13" fill="#e8a862"/>
+        <path d="M18 46 Q50 6 82 46 Q50 28 18 46 Z" fill="#b97330"/>
+        <ellipse cx="50" cy="70" rx="19" ry="15" fill="#fdebd0"/>
+        <ellipse cx="50" cy="62" rx="5.5" ry="3.8" fill="#3b2a24"/>
+        <path d="M50 66 V71 M50 71 Q44 76 39 72 M50 71 Q56 76 61 72" stroke="#3b2a24" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+        <circle cx="22" cy="68" r="5" fill="#ffb8c6" opacity="0.6"/>
+        <circle cx="78" cy="68" r="5" fill="#ffb8c6" opacity="0.6"/>
+      </symbol>
+      <!-- 눈 뜬 탄이 -->
+      <symbol id="dog" viewBox="0 0 100 100">
+        <use href="#dog-base" width="100" height="100"/>
+        <circle cx="35" cy="52" r="4.2" fill="#3b2a24"/>
+        <circle cx="65" cy="52" r="4.2" fill="#3b2a24"/>
+        <circle cx="36.5" cy="50.5" r="1.4" fill="#fff"/>
+        <circle cx="66.5" cy="50.5" r="1.4" fill="#fff"/>
+      </symbol>
+      <!-- 눈 감은 탄이 -->
+      <symbol id="dog-sleep" viewBox="0 0 100 100">
+        <use href="#dog-base" width="100" height="100"/>
+        <path d="M29 52 Q35 58 41 52" stroke="#3b2a24" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+        <path d="M59 52 Q65 58 71 52" stroke="#3b2a24" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      </symbol>
+    </defs>
+  </svg>
+
   <header>
     <h1>우리집 강아지 탄이를 소개합니다</h1>
     <p>만나러 오기 전에 미리 읽어봐 주세요!</p>
@@ -60,13 +284,109 @@
 
     <section id="photos">
       <h2>사진</h2>
+      <p style="margin:0 0 12px;color:var(--muted);font-size:.9rem">사진을 누르면 크게 볼 수 있어요.</p>
       <div class="photo-grid">
-        <button type="button" class="photo">사진 1</button>
-        <button type="button" class="photo">사진 2</button>
-        <button type="button" class="photo">사진 3</button>
-        <button type="button" class="photo">사진 4</button>
-        <button type="button" class="photo">사진 5</button>
-        <button type="button" class="photo">사진 6</button>
+
+        <!-- 1. 기본 인물사진 -->
+        <button type="button" class="photo" data-caption="탄이 (7살, 세이블 포메)">
+          <svg viewBox="0 0 200 200" role="img" aria-label="웃고 있는 탄이">
+            <rect width="200" height="200" fill="#ffe0ea"/>
+            <circle cx="30" cy="35" r="22" fill="#ffd0df"/>
+            <circle cx="175" cy="170" r="28" fill="#ffd0df"/>
+            <ellipse cx="100" cy="185" rx="50" ry="36" fill="#e8a862"/>
+            <ellipse cx="100" cy="190" rx="26" ry="26" fill="#fdebd0"/>
+            <use href="#dog" x="40" y="50" width="120" height="120"/>
+            <ellipse cx="100" cy="134" rx="6" ry="8" fill="#ff8fa8"/>
+            <text x="22" y="110" font-size="20" fill="#ff8fa8">♥</text>
+            <text x="165" y="70" font-size="16" fill="#ff8fa8">♥</text>
+          </svg>
+        </button>
+
+        <!-- 2. 아침 산책 -->
+        <button type="button" class="photo" data-caption="아침 7시, 산책 나온 탄이">
+          <svg viewBox="0 0 200 200" role="img" aria-label="산책하는 탄이">
+            <rect width="200" height="200" fill="#d6ebff"/>
+            <circle cx="165" cy="35" r="20" fill="#fff0a8"/>
+            <ellipse cx="50" cy="40" rx="26" ry="10" fill="#fff"/>
+            <ellipse cx="68" cy="34" rx="18" ry="9" fill="#fff"/>
+            <rect x="26" y="95" width="10" height="45" fill="#c9a07a"/>
+            <circle cx="31" cy="85" r="26" fill="#a8dcae"/>
+            <ellipse cx="100" cy="200" rx="140" ry="55" fill="#bfe8c0"/>
+            <ellipse cx="100" cy="170" rx="42" ry="22" fill="#e8a862"/>
+            <use href="#dog" x="45" y="75" width="110" height="110"/>
+            <path d="M150 130 Q170 150 185 120" stroke="#ff8fa8" stroke-width="3" fill="none"/>
+            <text x="12" y="188" font-size="12" fill="#4f8f5a">🌿</text>
+            <text x="150" y="190" font-size="12" fill="#4f8f5a">🌼</text>
+          </svg>
+        </button>
+
+        <!-- 3. 삑삑이 공 -->
+        <button type="button" class="photo" data-caption="삑삑이 공이 제일 좋아!">
+          <svg viewBox="0 0 200 200" role="img" aria-label="삑삑이 공과 탄이">
+            <rect width="200" height="200" fill="#fff3c4"/>
+            <circle cx="20" cy="25" r="5" fill="#ffe27a"/>
+            <circle cx="180" cy="40" r="7" fill="#ffe27a"/>
+            <circle cx="170" cy="165" r="5" fill="#ffe27a"/>
+            <ellipse cx="100" cy="188" rx="48" ry="30" fill="#e8a862"/>
+            <use href="#dog" x="40" y="45" width="120" height="120"/>
+            <ellipse cx="100" cy="133" rx="5.5" ry="8" fill="#ff8fa8"/>
+            <circle cx="160" cy="150" r="22" fill="#ff9ec0"/>
+            <path d="M142 142 Q160 132 178 142" stroke="#fff" stroke-width="3" fill="none"/>
+            <text x="146" y="162" font-size="13" font-weight="bold" fill="#fff">삑!</text>
+            <path d="M175 118 l8 -8 M185 135 l10 -2 M135 118 l-6 -8" stroke="#ffb347" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        </button>
+
+        <!-- 4. 고구마 간식 -->
+        <button type="button" class="photo" data-caption="고구마 간식 냠냠">
+          <svg viewBox="0 0 200 200" role="img" aria-label="고구마를 먹으려는 탄이">
+            <rect width="200" height="200" fill="#e8defb"/>
+            <circle cx="25" cy="170" r="20" fill="#dcd0f5"/>
+            <circle cx="180" cy="30" r="16" fill="#dcd0f5"/>
+            <ellipse cx="100" cy="188" rx="48" ry="30" fill="#e8a862"/>
+            <use href="#dog" x="35" y="40" width="120" height="120"/>
+            <g transform="rotate(-25 150 150)">
+              <ellipse cx="150" cy="150" rx="30" ry="14" fill="#a8527a"/>
+              <ellipse cx="124" cy="150" rx="6" ry="11" fill="#ffc15e"/>
+              <path d="M140 143 Q150 140 162 144" stroke="#c97a9c" stroke-width="2" fill="none"/>
+            </g>
+            <text x="120" y="108" font-size="16" fill="#ff8fa8">♥</text>
+            <text x="165" y="100" font-size="12" fill="#ff8fa8">♥</text>
+          </svg>
+        </button>
+
+        <!-- 5. 낮잠 -->
+        <button type="button" class="photo" data-caption="낮잠 시간, 쿨쿨">
+          <svg viewBox="0 0 200 200" role="img" aria-label="낮잠 자는 탄이">
+            <rect width="200" height="200" fill="#d9f2e6"/>
+            <text x="135" y="55" font-size="26" font-weight="bold" fill="#7bbf9c">Z</text>
+            <text x="155" y="35" font-size="18" font-weight="bold" fill="#9fd2b8">z</text>
+            <text x="172" y="20" font-size="12" font-weight="bold" fill="#b6e0cb">z</text>
+            <ellipse cx="100" cy="170" rx="85" ry="26" fill="#ffc9d9"/>
+            <ellipse cx="100" cy="160" rx="75" ry="22" fill="#ffd9e5"/>
+            <ellipse cx="100" cy="150" rx="52" ry="26" fill="#e8a862"/>
+            <use href="#dog-sleep" x="40" y="55" width="120" height="120"/>
+          </svg>
+        </button>
+
+        <!-- 6. 밤 10시 잠 -->
+        <button type="button" class="photo" data-caption="밤 10시, 잘 자 탄이">
+          <svg viewBox="0 0 200 200" role="img" aria-label="밤에 잠든 탄이">
+            <rect width="200" height="200" fill="#c9cff2"/>
+            <circle cx="160" cy="45" r="24" fill="#fff6d0"/>
+            <circle cx="170" cy="38" r="22" fill="#c9cff2"/>
+            <text x="30" y="40" font-size="14" fill="#fff6d0">★</text>
+            <text x="75" y="25" font-size="10" fill="#fff6d0">★</text>
+            <text x="120" y="60" font-size="12" fill="#fff6d0">★</text>
+            <text x="20" y="90" font-size="10" fill="#fff6d0">★</text>
+            <ellipse cx="100" cy="188" rx="48" ry="30" fill="#e8a862"/>
+            <use href="#dog-sleep" x="40" y="50" width="120" height="120"/>
+            <path d="M15 200 Q100 135 185 200 Z" fill="#a8b2ee"/>
+            <path d="M15 200 Q100 150 185 200 Z" fill="#b9c2f5"/>
+            <text x="90" y="35" font-size="16" font-weight="bold" fill="#fff">z</text>
+          </svg>
+        </button>
+
       </div>
     </section>
   </main>
@@ -74,6 +394,7 @@
   <div id="modal" class="modal" role="dialog" aria-modal="true" aria-label="사진 크게 보기" hidden>
     <div class="modal-box">
       <div id="modal-photo" class="modal-photo"></div>
+      <p id="modal-caption"></p>
       <button type="button" id="modal-close">닫기</button>
     </div>
   </div>
@@ -81,12 +402,14 @@
   <script>
     const modal = document.getElementById('modal');
     const modalPhoto = document.getElementById('modal-photo');
+    const modalCaption = document.getElementById('modal-caption');
     const closeBtn = document.getElementById('modal-close');
     let lastPhoto = null;
 
     function openModal(photo) {
       lastPhoto = photo;
-      modalPhoto.textContent = photo.textContent;
+      modalPhoto.replaceChildren(photo.querySelector('svg').cloneNode(true));
+      modalCaption.textContent = photo.dataset.caption;
       modal.hidden = false;
       closeBtn.focus();
     }
